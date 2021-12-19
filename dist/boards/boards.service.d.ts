@@ -1,4 +1,4 @@
-import { Board, BoardStatus } from './board.model';
+import { Board, BoardStatus } from "./board.model";
 export declare class BoardsService {
     private boards;
     getAllBoards(): Board[];
