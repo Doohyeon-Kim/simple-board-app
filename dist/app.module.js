@@ -9,11 +9,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const boards_module_1 = require("./boards/boards.module");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_configs_1 = require("./configs/typeorm.configs");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [boards_module_1.BoardsModule],
+        imports: [typeorm_1.TypeOrmModule.forRoot(typeorm_configs_1.typeORMConfig), boards_module_1.BoardsModule, auth_module_1.AuthModule],
         controllers: [],
         providers: [],
     })

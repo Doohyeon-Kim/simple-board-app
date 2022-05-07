@@ -1,12 +1,13 @@
-import { Module } from "@nestjs/common";
+import { DynamicModule, Module } from "@nestjs/common";
 import { BoardsModule } from "./boards/boards.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { typeORMConfig } from "./boards/configs/typeorm.configs";
+import { typeORMConfig } from "./configs/typeorm.configs";
+import { AuthModule } from "./auth/auth.module";
+import { JwtModule, JwtModuleOptions } from "@nestjs/jwt";
 
 @Module({
-  imports: [BoardsModule, TypeOrmModule.forRoot(typeORMConfig)],
+  imports: [TypeOrmModule.forRoot(typeORMConfig), BoardsModule, AuthModule],
   controllers: [],
-  providers: []
+  providers: [],
 })
-export class AppModule {
-}
+export class AppModule {}
