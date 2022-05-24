@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
+const jwt_strategy_1 = require("./jwt.strategy");
 const typeorm_1 = require("@nestjs/typeorm");
 const common_1 = require("@nestjs/common");
 const auth_controller_1 = require("./auth.controller");
@@ -19,7 +20,7 @@ let AuthModule = class AuthModule {
 AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
+            passport_1.PassportModule.register({ defaultStrategy: "jwt" }),
             jwt_1.JwtModule.register({
                 secret: "Secret1234",
                 signOptions: {
@@ -29,7 +30,8 @@ AuthModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([user_repository_1.UserRepository]),
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService],
+        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy],
+        exports: [jwt_strategy_1.JwtStrategy, passport_1.PassportModule],
     })
 ], AuthModule);
 exports.AuthModule = AuthModule;

@@ -6,6 +6,7 @@ import { CreateBoardDto } from "./dto/create-board.dto";
 import { Board } from "./board.entity";
 import { BoardStatus } from "./board-status.enum";
 import { DeleteResult } from "typeorm";
+import { User } from "src/auth/user.entity";
 
 @Injectable()
 export class BoardsService {
@@ -17,7 +18,7 @@ export class BoardsService {
   async getAllBoards(): Promise<Board[]> {
     return await this.boardRepository.find();
   }
-  
+
   async getBoardById(id: number): Promise<Board> {
     const found: Board = await this.boardRepository.findOne(id);
 
@@ -27,23 +28,18 @@ export class BoardsService {
     return found;
   }
 
-  async createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
-    // const board: CreateBoardDto = createBoardDto;
-    const { title, description }: CreateBoardDto = createBoardDto;
-
-    const board = this.boardRepository.create({
-      title,
-      description,
-      status: BoardStatus.PUBLIC,
-    });
-    {
-      await this.boardRepository.save(board);
-      return board;
-    }
+  async createBoard(
+    createBoardDto: CreateBoardDto,
+    user: User
+  ): Promise<Board> {
+    return this.boardRepository.createBoard(createBoardDto, user);
   }
 
-  async deleteBoardById(id: number): Promise<void> {
-    const result: DeleteResult = await this.boardRepository.delete(id);
+  async deleteBoard(id: number, user: User): Promise<void> {
+    const result: DeleteResult = await this.boardRepository.delete({
+      id,
+      user,
+    });
     if (result.affected === 0) {
       throw new NotFoundException(`Can't find Board with id ${id}`);
     }

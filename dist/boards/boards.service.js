@@ -16,7 +16,6 @@ exports.BoardsService = void 0;
 const board_repository_1 = require("./board.repository");
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const board_status_enum_1 = require("./board-status.enum");
 let BoardsService = class BoardsService {
     constructor(boardRepository) {
         this.boardRepository = boardRepository;
@@ -31,20 +30,14 @@ let BoardsService = class BoardsService {
         }
         return found;
     }
-    async createBoard(createBoardDto) {
-        const { title, description } = createBoardDto;
-        const board = this.boardRepository.create({
-            title,
-            description,
-            status: board_status_enum_1.BoardStatus.PUBLIC,
-        });
-        {
-            await this.boardRepository.save(board);
-            return board;
-        }
+    async createBoard(createBoardDto, user) {
+        return this.boardRepository.createBoard(createBoardDto, user);
     }
-    async deleteBoardById(id) {
-        const result = await this.boardRepository.delete(id);
+    async deleteBoard(id, user) {
+        const result = await this.boardRepository.delete({
+            id,
+            user,
+        });
         if (result.affected === 0) {
             throw new common_1.NotFoundException(`Can't find Board with id ${id}`);
         }

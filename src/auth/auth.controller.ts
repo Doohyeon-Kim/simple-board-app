@@ -7,8 +7,13 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Req,
+  UseGuards,
   ValidationPipe,
 } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
+import { User } from "./user.entity";
+import { GetUser } from "./get-user.decorator";
 
 @Controller("auth")
 export class AuthController {
@@ -31,5 +36,11 @@ export class AuthController {
   @Delete("/:id")
   deleteUser(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.authService.deleteUserById(id);
+  }
+
+  @Post("/test")
+  @UseGuards(AuthGuard())
+  test(@GetUser() user: User) {
+    console.log("user", user);
   }
 }

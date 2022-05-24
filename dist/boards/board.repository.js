@@ -8,8 +8,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BoardReposiory = void 0;
 const typeorm_1 = require("typeorm");
+const board_status_enum_1 = require("./board-status.enum");
 const board_entity_1 = require("./board.entity");
 let BoardReposiory = class BoardReposiory extends typeorm_1.Repository {
+    async createBoard(createBoardDto, user) {
+        const { title, description } = createBoardDto;
+        const board = await this.create({
+            title,
+            description,
+            status: board_status_enum_1.BoardStatus.PUBLIC,
+            user: user,
+        });
+        await this.save(board);
+        return board;
+    }
 };
 BoardReposiory = __decorate([
     (0, typeorm_1.EntityRepository)(board_entity_1.Board)
